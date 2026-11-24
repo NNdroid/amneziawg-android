@@ -186,6 +186,7 @@
     <string name="random_trailers">Random trailers</string>
     <string name="disable_cookies">Disable cookies</string>
     <string name="ip4p">IP4P (IPv4 privacy)</string>
+    <string name="ip4p_section_title">IP4P / privacy</string>
     <string name="bootstrap_dns">Bootstrap DNS servers</string>
     <string name="ip4p_prefix">IP4P prefix</string>
     <string name="connection_state">Connection address</string>

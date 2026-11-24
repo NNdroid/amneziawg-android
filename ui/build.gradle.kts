@@ -5,6 +5,19 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val pkg: String = providers.gradleProperty("amneziawgPackageName").get()
 
+// versionCode = git tag count + 1 (project rule). A manual override is still
+// possible with -PamneziawgVersionCode=N for emergency/backport builds.
+val versionCodeValue: Int = providers.gradleProperty("amneziawgVersionCode")
+    .map { it.toInt() }
+    .orElse(
+        providers.exec {
+            commandLine("git", "tag", "--list")
+        }.standardOutput.asText.map { out ->
+            out.trim().split("\n").count { it.isNotBlank() } + 1
+        }
+    )
+    .get()
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -21,7 +34,7 @@ android {
     defaultConfig {
         applicationId = pkg
         targetSdk = 36
-        versionCode = providers.gradleProperty("amneziawgVersionCode").get().toInt()
+        versionCode = versionCodeValue
         versionName = providers.gradleProperty("amneziawgVersionName").get()
         buildConfigField("int", "MIN_SDK_VERSION", minSdk.toString())
     }

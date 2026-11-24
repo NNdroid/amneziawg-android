@@ -793,6 +793,18 @@
                                 android:text="@={config.interface.disableCookies}" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/ip4p_section_header"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/ip4p_section_title"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/disable_cookies_layout" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ip4p_layout"
                             android:layout_width="0dp"
@@ -801,7 +813,7 @@
                             android:hint="@string/ip4p"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/disable_cookies_layout">
+                            app:layout_constraintTop_toBottomOf="@+id/ip4p_section_header">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/ip4p_text"
