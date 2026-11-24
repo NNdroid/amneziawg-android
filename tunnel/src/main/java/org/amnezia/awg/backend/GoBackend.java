@@ -18,6 +18,7 @@ import org.amnezia.awg.util.SharedLibraryLoader;
 import org.amnezia.awg.config.Config;
 import org.amnezia.awg.config.InetEndpoint;
 import org.amnezia.awg.config.InetNetwork;
+import org.amnezia.awg.config.Interface;
 import org.amnezia.awg.config.Peer;
 import org.amnezia.awg.crypto.Key;
 import org.amnezia.awg.crypto.KeyFormatException;
@@ -413,6 +414,18 @@ public final class GoBackend implements Backend {
 
             // Build config
             final String goConfig = config.toAwgUserspaceString();
+
+            // IP4P diagnostics: surface the configured bootstrap DNS servers and
+            // IP4P prefix, and how each peer's endpoint will be handled. This is
+            // useful when IP4P endpoints fail to resolve or activate.
+            final Interface interfaze = config.getInterface();
+            Log.i(TAG, "IP4P config: bootstrap_dns=" + interfaze.getBootstrapDns().orElse("<none>")
+                    + " ip4p_prefix=" + interfaze.getIp4pPrefix().orElse("<none>"));
+            for (final Peer peer : config.getPeers()) {
+                final String ep = peer.getEndpoint().map(Object::toString).orElse("<none>");
+                final boolean asHost = interfaze.getBootstrapDns().isPresent();
+                Log.i(TAG, "IP4P peer endpoint=" + ep + " sentAs=" + (asHost ? "hostname (backend resolves)" : "resolved numeric"));
+            }
 
             // Create the vpn tunnel with android API
             final VpnService.Builder builder = service.getBuilder();

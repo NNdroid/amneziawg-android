@@ -701,6 +701,8 @@ public final class Interface {
         maxHandshakeAttempts.ifPresent(mha -> sb.append("MaxHandshakeAttempts = ").append(mha).append('\n'));
         randomTrailers.ifPresent(rt -> sb.append("RandomTrailers = ").append(rt).append('\n'));
         disableCookies.ifPresent(dc -> sb.append("DisableCookies = ").append(dc).append('\n'));
+        bootstrapDns.ifPresent(bd -> sb.append("BootstrapDns = ").append(bd).append('\n'));
+        ip4pPrefix.ifPresent(prefix -> sb.append("Ip4pPrefix = ").append(prefix).append('\n'));
         sb.append("PrivateKey = ").append(keyPair.getPrivateKey().toBase64()).append('\n');
         return sb.toString();
     }

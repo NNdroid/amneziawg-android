@@ -23,6 +23,7 @@ class FileConfigStore(private val context: Context) : ConfigStore {
     @Throws(IOException::class)
     override fun create(name: String, config: Config): Config {
         Log.d(TAG, "Creating configuration for tunnel $name")
+        logIp4p("create", name, config)
         val file = fileFor(name)
         if (!file.createNewFile())
             throw IOException(context.getString(R.string.config_file_exists_error, file.name))
@@ -51,7 +52,9 @@ class FileConfigStore(private val context: Context) : ConfigStore {
 
     @Throws(BadConfigException::class, IOException::class)
     override fun load(name: String): Config {
-        FileInputStream(fileFor(name)).use { stream -> return Config.parse(stream) }
+        val config = FileInputStream(fileFor(name)).use { stream -> Config.parse(stream) }
+        logIp4p("load", name, config)
+        return config
     }
 
     @Throws(IOException::class)
@@ -69,11 +72,27 @@ class FileConfigStore(private val context: Context) : ConfigStore {
     @Throws(IOException::class)
     override fun save(name: String, config: Config): Config {
         Log.d(TAG, "Saving configuration for tunnel $name")
+        logIp4p("save", name, config)
         val file = fileFor(name)
         if (!file.isFile)
             throw FileNotFoundException(context.getString(R.string.config_not_found_error, file.name))
         FileOutputStream(file, false).use { stream -> stream.write(config.toAwgQuickString().toByteArray(StandardCharsets.UTF_8)) }
         return config
+    }
+
+    /**
+     * Logs the IP4P-relevant fields (bootstrap DNS and IP4P prefix) for
+     * diagnostics. These fields were previously not persisted in the
+     * awg-quick config format, which caused them to appear empty after a
+     * save/reload cycle.
+     */
+    private fun logIp4p(action: String, name: String, config: Config) {
+        val interfaze = config.getInterface()
+        Log.d(
+            TAG,
+            "IP4P $action tunnel=$name bootstrap_dns=${interfaze.bootstrapDns.orElse("<none>")} " +
+                "ip4p_prefix=${interfaze.ip4pPrefix.orElse("<none>")}"
+        )
     }
 
     companion object {
