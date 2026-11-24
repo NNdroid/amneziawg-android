@@ -37,6 +37,9 @@ val versionNameValue: String = providers.gradleProperty("amneziawgVersionName")
 
 plugins {
     alias(libs.plugins.android.application)
+    // Built-in Kotlin (AGP 9) is disabled via android.builtInKotlin=false in
+    // gradle.properties so the classic kotlin-android + kotlin-kapt plugins
+    // keep working. See https://developer.android.com/r/tools/built-in-kotlin.
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
 }

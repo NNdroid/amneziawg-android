@@ -18,7 +18,8 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.android.settings") version "8.13.0"
+    // Keep in sync with the "agp" version in gradle/libs.versions.toml.
+    id("com.android.settings") version "9.5.2"
 }
 
 rootProject.name = "amneziawg-android"
