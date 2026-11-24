@@ -13,6 +13,12 @@
     <string name="bad_extension_error">A fájl .conf vagy .zip legyen</string>
     <string name="config_not_found_error">Konfigurációs állomány \"%s\" nem található meg</string>
     <string name="dns_servers">DNS szerverek</string>
+    <string name="bootstrap_dns">Bootstrap DNS-szerver</string>
+    <string name="ip4p_prefix">IP4P előtag</string>
+    <string name="connection_state">Kapcsolati cím</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P frissítve</string>
     <string name="dns_search_domains">Domain keresés</string>
     <string name="edit">Szerkesztés</string>
     <string name="endpoint">Végpont</string>

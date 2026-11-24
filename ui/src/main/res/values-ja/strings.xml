@@ -97,6 +97,12 @@
     <string name="disable_config_export_title">設定のエクスポートを無効にする</string>
     <string name="disable_config_export_description">設定のエクスポートを無効にすると、秘密鍵にアクセスされにくくなります</string>
     <string name="dns_servers">DNS サーバ</string>
+    <string name="bootstrap_dns">ブートストラップ DNS サーバー</string>
+    <string name="ip4p_prefix">IP4P プレフィックス</string>
+    <string name="connection_state">接続先アドレス</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P 更新済み</string>
     <string name="dns_search_domains">サーチドメイン</string>
     <string name="edit">編集</string>
     <string name="endpoint">エンドポイント</string>

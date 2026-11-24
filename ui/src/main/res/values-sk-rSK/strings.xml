@@ -55,6 +55,12 @@
     <string name="disable_config_export_title">Zakázať export konfigurácie</string>
     <string name="disable_config_export_description">Zakázanie exportu konfigurácie spôsobí, že prístup k súkromným kľúčom sa stáva zložitým</string>
     <string name="dns_servers">Servery DNS</string>
+    <string name="bootstrap_dns">Bootstrap DNS server</string>
+    <string name="ip4p_prefix">Predpona IP4P</string>
+    <string name="connection_state">Adresa pripojenia</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P aktualizované</string>
     <string name="dns_search_domains">Prehľadávať domény</string>
     <string name="edit">Upraviť</string>
     <string name="endpoint">Koncový bod</string>

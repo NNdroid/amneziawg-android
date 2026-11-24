@@ -97,6 +97,12 @@
     <string name="disable_config_export_title">Vô hiệu hóa xuất cấu hình</string>
     <string name="disable_config_export_description">Vô hiệu hóa xuất cấu hình sẽ giúp giảm khả năng truy cập vào private keys</string>
     <string name="dns_servers">DNS servers</string>
+    <string name="bootstrap_dns">Máy chủ DNS khởi động</string>
+    <string name="ip4p_prefix">Tiền tố IP4P</string>
+    <string name="connection_state">Địa chỉ kết nối</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P đã cập nhật</string>
     <string name="dns_search_domains">Tên miền của DNS tìm kiếm</string>
     <string name="edit">Chỉnh sửa</string>
     <string name="endpoint">Đầu cuối</string>

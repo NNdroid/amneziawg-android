@@ -123,6 +123,12 @@
     <string name="disable_config_export_title">Dezactivează exportarea configurației</string>
     <string name="disable_config_export_description">Dezactivarea exportării configurației face mai puțin accesibile cheile private</string>
     <string name="dns_servers">Servere DNS</string>
+    <string name="bootstrap_dns">Server DNS de pornire</string>
+    <string name="ip4p_prefix">Prefix IP4P</string>
+    <string name="connection_state">Adresă de conexiune</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P actualizat</string>
     <string name="dns_search_domains">Domenii de căutare</string>
     <string name="edit">Editare</string>
     <string name="endpoint">Punct final</string>

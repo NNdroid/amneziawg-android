@@ -136,6 +136,12 @@
     <string name="disable_config_export_title">Вимкнути експорт конфігурації</string>
     <string name="disable_config_export_description">Вимкнення експорту налаштувань робить приватні ключі менш доступними</string>
     <string name="dns_servers">DNS-сервери</string>
+    <string name="bootstrap_dns">Bootstrap DNS-сервер</string>
+    <string name="ip4p_prefix">Префікс IP4P</string>
+    <string name="connection_state">Адреса з’єднання</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P оновлено</string>
     <string name="dns_search_domains">Пошук доменів</string>
     <string name="edit">Редагувати</string>
     <string name="endpoint">Endpoint</string>

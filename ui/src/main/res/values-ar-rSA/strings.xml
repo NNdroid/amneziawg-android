@@ -162,6 +162,12 @@
     <string name="disable_config_export_title">تعطيل تصدير التكوين</string>
     <string name="disable_config_export_description">تعطيل تصدير الإعدادات يجعل المفاتيح الخاصة غير متاحة</string>
     <string name="dns_servers">خوادم DNS</string>
+    <string name="bootstrap_dns">خادم DNS للتهيئة</string>
+    <string name="ip4p_prefix">بادئة IP4P</string>
+    <string name="connection_state">عنوان الاتصال</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">تم تحديث IP4P</string>
     <string name="dns_search_domains">البحث عن النطاقات</string>
     <string name="edit">تعديل</string>
     <string name="endpoint">نقطة نهاية</string>

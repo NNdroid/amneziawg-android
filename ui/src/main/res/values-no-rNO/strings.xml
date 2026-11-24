@@ -110,6 +110,12 @@
     <string name="disable_config_export_title">Deaktiver eksport av konfigurasjon</string>
     <string name="disable_config_export_description">Deaktivering av konfigurasjonseksport gjør private nøkler mindre tilgjengelig</string>
     <string name="dns_servers">DNS tjenere</string>
+    <string name="bootstrap_dns">Oppstarts-DNS-server</string>
+    <string name="ip4p_prefix">IP4P-prefiks</string>
+    <string name="connection_state">Tilkoblingsadresse</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P oppdatert</string>
     <string name="dns_search_domains">Søk gjennom domener</string>
     <string name="edit">Rediger</string>
     <string name="endpoint">Endepunkt</string>

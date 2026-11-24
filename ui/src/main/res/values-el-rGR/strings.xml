@@ -85,6 +85,12 @@
     <string name="dark_theme_title">Χρήση σκούρου θέματος</string>
     <string name="delete">Διαγραφή</string>
     <string name="dns_servers">Διακομιστές DNS</string>
+    <string name="bootstrap_dns">Διακομιστής DNS εκκίνησης</string>
+    <string name="ip4p_prefix">Πρόθεμα IP4P</string>
+    <string name="connection_state">Διεύθυνση σύνδεσης</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">Το IP4P ενημερώθηκε</string>
     <string name="dns_search_domains">Αναζήτηση τομέων</string>
     <string name="edit">Επεξεργασία</string>
     <string name="exclude_private_ips">Εξαίρεση ιδιωτικών IP</string>

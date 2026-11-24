@@ -111,6 +111,12 @@
     <string name="disable_config_export_title">غیرفعال سازی خروجی گرفتن از کانفیگ ها</string>
     <string name="disable_config_export_description">غیرفعال سازی خروجی گرفتن، دسترسی کلیدهای خصوصی را کم می کند</string>
     <string name="dns_servers">سرورهای DNS</string>
+    <string name="bootstrap_dns">سرور DNS راه‌انداز</string>
+    <string name="ip4p_prefix">پیشوند IP4P</string>
+    <string name="connection_state">آدرس اتصال</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P به‌روزرسانی شد</string>
     <string name="dns_search_domains">جست‌وجوی دامنه‌ها</string>
     <string name="edit">ویرایش</string>
     <string name="endpoint">نقطه پایان</string>

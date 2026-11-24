@@ -65,6 +65,12 @@
     <string name="delete">हटाएं</string>
     <string name="toggle_all">सबको स्विच करे</string>
     <string name="dns_servers">डीएनएस सर्वर</string>
+    <string name="bootstrap_dns">बूटस्ट्रैप DNS सर्वर</string>
+    <string name="ip4p_prefix">IP4P उपसर्ग</string>
+    <string name="connection_state">कनेक्शन पता</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P अपडेट किया गया</string>
     <string name="edit">संपादित करें</string>
     <string name="endpoint">अंतिम</string>
     <string name="error_down">टनल को लाने में त्रुटि: %s</string>

@@ -134,6 +134,12 @@
     <string name="disable_config_export_title">Onemogoči izvoz nastavitev</string>
     <string name="disable_config_export_description">Onemogočenje nastavitev za izvoz nastavitev naredi zasebne ključe manj dostopne</string>
     <string name="dns_servers">Strežniki DNS</string>
+    <string name="bootstrap_dns">Zagonski DNS-strežnik</string>
+    <string name="ip4p_prefix">Predpona IP4P</string>
+    <string name="connection_state">Naslov povezave</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P posodobljen</string>
     <string name="dns_search_domains">Pripone DNS</string>
     <string name="edit">Uredi</string>
     <string name="endpoint">Končna točka</string>

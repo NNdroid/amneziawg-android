@@ -110,6 +110,12 @@
     <string name="disable_config_export_title">Config export uitschakelen</string>
     <string name="disable_config_export_description">Het uitschakelen van configuratie export maakt privésleutels minder toegankelijk</string>
     <string name="dns_servers">DNS-servers</string>
+    <string name="bootstrap_dns">Bootstrap-DNS-server</string>
+    <string name="ip4p_prefix">IP4P-voorvoegsel</string>
+    <string name="connection_state">Verbindingsadres</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P bijgewerkt</string>
     <string name="dns_search_domains">DNS-zoekdomeinen</string>
     <string name="edit">Bewerken</string>
     <string name="endpoint">Eindpunt</string>

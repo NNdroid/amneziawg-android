@@ -108,6 +108,12 @@
     <string name="disable_config_export_title">Desactiva l\'exportació de configuracions</string>
     <string name="disable_config_export_description">Desactivar l\'exportacio de configuracions fa que les claus privades siguin menys accessibles</string>
     <string name="dns_servers">Servidors DNS</string>
+    <string name="bootstrap_dns">Servidor DNS d\'arrencada</string>
+    <string name="ip4p_prefix">Prefix IP4P</string>
+    <string name="connection_state">Adreça de connexió</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P actualitzat</string>
     <string name="edit">Edita</string>
     <string name="endpoint">Extrem</string>
     <string name="error_down">Error desactivant el túnel: %s</string>

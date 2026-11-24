@@ -108,6 +108,12 @@
     <string name="disable_config_export_title">ਸੰਰਚਨਾ ਐਕਸਪੋਰਟ ਕਰਨ ਨੂੰ ਅਸਮਰੱਥ ਕਰੋ</string>
     <string name="disable_config_export_description">ਸੰਰਚਨਾ ਐਕਸਪੋਰਟ ਕਰਨ ਉੱਤੇ ਰੋਕ ਲਾਉਣ ਨਾਲ ਪ੍ਰਾਈਵੇਟ ਕੁੰਜੀਆਂ ਲਈ ਪਹੁੰਚ ਘਟੇਗੀ</string>
     <string name="dns_servers">DNS ਸਰਵਰ</string>
+    <string name="bootstrap_dns">ਬੂਟਸਟ੍ਰੈਪ DNS ਸਰਵਰ</string>
+    <string name="ip4p_prefix">IP4P ਅਗੇਤਰ</string>
+    <string name="connection_state">ਕਨੈਕਸ਼ਨ ਪਤਾ</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P ਅੱਪਡੇਟ ਕੀਤਾ</string>
     <string name="edit">ਸੋਧੋ</string>
     <string name="endpoint">ਐਂਡ-ਪੁਆਇੰਟ</string>
     <string name="error_down">ਟਨਲ ਬੰਦ ਕਰਨ ਦੌਰਾਨ ਗ਼ਲਤੀ: %s</string>

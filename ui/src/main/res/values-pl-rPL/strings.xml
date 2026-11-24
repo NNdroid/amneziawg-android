@@ -136,6 +136,12 @@
     <string name="disable_config_export_title">Wyłącz eksportowanie konfiguracji</string>
     <string name="disable_config_export_description">Wyłączenie eksportowania konfiguracji sprawi, że klucze prywatne będą mniej dostępne</string>
     <string name="dns_servers">Serwery DNS</string>
+    <string name="bootstrap_dns">Serwer DNS bootstrap</string>
+    <string name="ip4p_prefix">Prefiks IP4P</string>
+    <string name="connection_state">Adres połączenia</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P zaktualizowano</string>
     <string name="dns_search_domains">Sufiksy DNS</string>
     <string name="edit">Edytuj</string>
     <string name="endpoint">Punkt końcowy</string>

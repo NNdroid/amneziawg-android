@@ -110,6 +110,12 @@
     <string name="disable_config_export_title">Désactiver l\'export de configuration</string>
     <string name="disable_config_export_description">La désactivation de l\'export de configuration rend les clés privées moins accessibles</string>
     <string name="dns_servers">Serveurs DNS</string>
+    <string name="bootstrap_dns">Serveur DNS d\'amorçage</string>
+    <string name="ip4p_prefix">Préfixe IP4P</string>
+    <string name="connection_state">Adresse de connexion</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P mis à jour</string>
     <string name="dns_search_domains">Domaines de recherche DNS</string>
     <string name="edit">Modifier</string>
     <string name="endpoint">Point de terminaison</string>

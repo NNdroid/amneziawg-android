@@ -97,6 +97,12 @@
     <string name="disable_config_export_title">禁止匯出設定檔</string>
     <string name="disable_config_export_description">禁止匯出設定檔可以降低私鑰被存取的機會</string>
     <string name="dns_servers">DNS 伺服器</string>
+    <string name="bootstrap_dns">Bootstrap DNS 伺服器</string>
+    <string name="ip4p_prefix">IP4P 前綴</string>
+    <string name="connection_state">連線位址</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P 已更新</string>
     <string name="dns_search_domains">搜尋網域</string>
     <string name="edit">編輯</string>
     <string name="endpoint">終端點</string>

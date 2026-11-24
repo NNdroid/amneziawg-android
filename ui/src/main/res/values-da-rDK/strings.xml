@@ -100,6 +100,12 @@
     <string name="tv_add_tunnel_get_started">Tilføj en tunnel for at komme i gang</string>
     <string name="disable_config_export_title">Deaktivér eksportering af konfiguration</string>
     <string name="dns_servers">DNS-servere</string>
+    <string name="bootstrap_dns">Bootstrap DNS-server</string>
+    <string name="ip4p_prefix">IP4P-præfiks</string>
+    <string name="connection_state">Forbindelsesadresse</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P opdateret</string>
     <string name="dns_search_domains">DNS-søgedomæner</string>
     <string name="edit">Redigér</string>
     <string name="endpoint">Slutpunkt</string>

@@ -41,6 +41,12 @@
     <string name="delete">Poista</string>
     <string name="tv_delete">Valitse poistettava tunneli</string>
     <string name="dns_servers">DNS palvelimet</string>
+    <string name="bootstrap_dns">Käynnistys-DNS-palvelin</string>
+    <string name="ip4p_prefix">IP4P-etuliite</string>
+    <string name="connection_state">Yhteysosoite</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P päivitetty</string>
     <string name="dns_search_domains">Hakudomaini</string>
     <string name="edit">Muokkaa</string>
     <string name="endpoint">Päätepiste</string>

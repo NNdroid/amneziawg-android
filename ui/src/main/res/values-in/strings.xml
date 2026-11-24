@@ -97,6 +97,12 @@
     <string name="disable_config_export_title">Nonaktifkan ekspor konfigurasi</string>
     <string name="disable_config_export_description">Menonaktifkan ekspor konfigurasi akan membuat kunci pribadi sulit diakses</string>
     <string name="dns_servers">Server DNS</string>
+    <string name="bootstrap_dns">Server DNS bootstrap</string>
+    <string name="ip4p_prefix">Prefiks IP4P</string>
+    <string name="connection_state">Alamat koneksi</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P diperbarui</string>
     <string name="dns_search_domains">Cari domain</string>
     <string name="edit">Edit</string>
     <string name="endpoint">Endpoint</string>

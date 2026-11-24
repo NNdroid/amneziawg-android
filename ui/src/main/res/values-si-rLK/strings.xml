@@ -83,6 +83,12 @@
     <string name="tv_no_file_picker">කරුණාකර ගොනු පිරික්සීමට ගොනු කළමනාකරණ උපයෝගිතා ස්ථාපනය කරන්න</string>
     <string name="disable_config_export_description">වින්‍යාස අපනයනය අක්‍රිය කිරීම පුද්ගලික යතුරු වලට ප්‍රවේශ වීම අඩු කරයි</string>
     <string name="dns_servers">ව.නා.ප. සේවාදායක</string>
+    <string name="bootstrap_dns">ආරම්භක DNS සේවාදායක</string>
+    <string name="ip4p_prefix">IP4P උපසර්ගය</string>
+    <string name="connection_state">සම්බන්ධතා ලිපිනය</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P යාවත්කාලීන කරන ලදී</string>
     <string name="dns_search_domains">වසම් සොයන්න</string>
     <string name="edit">සංස්කරණය</string>
     <string name="error_fetching_apps">යෙදුම් ලැයිස්තුව ලබා ගැනීමේ දෝෂයකි: %s</string>

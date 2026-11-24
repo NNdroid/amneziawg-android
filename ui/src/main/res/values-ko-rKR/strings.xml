@@ -97,6 +97,12 @@
     <string name="disable_config_export_title">설정 내보내기 기능을 중지</string>
     <string name="disable_config_export_description">설정 내보내기 기능을 중지하면 개인키 유출을 줄일 수 있음</string>
     <string name="dns_servers">DNS 서버</string>
+    <string name="bootstrap_dns">부트스트랩 DNS 서버</string>
+    <string name="ip4p_prefix">IP4P 접두사</string>
+    <string name="connection_state">연결 주소</string>
+    <string name="connection_state_ip4p">IP4P %1$s</string>
+    <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P 업데이트됨</string>
     <string name="dns_search_domains">Dns 도메인 검색</string>
     <string name="edit"> 수정</string>
     <string name="endpoint">엔드포인트</string>
