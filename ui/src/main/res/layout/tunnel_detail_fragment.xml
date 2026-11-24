@@ -894,12 +894,68 @@
                         app:layout_constraintTop_toBottomOf="@+id/disable_cookies_label"
                         tools:text="on" />
 
+                    <TextView
+                        android:id="@+id/bootstrap_dns_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:labelFor="@+id/bootstrap_dns_text"
+                        android:text="@string/bootstrap_dns"
+                        android:visibility="@{!config.interface.bootstrapDns.isPresent() ? android.view.View.GONE : android.view.View.VISIBLE}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/disable_cookies_text" />
+
+                    <TextView
+                        android:id="@+id/bootstrap_dns_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:contentDescription="@string/bootstrap_dns"
+                        android:nextFocusUp="@id/disable_cookies_text"
+                        android:nextFocusDown="@id/ip4p_prefix_text"
+                        android:nextFocusForward="@id/ip4p_prefix_text"
+                        android:onClick="@{ClipboardUtils::copyTextView}"
+                        android:text="@{config.interface.bootstrapDns}"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
+                        android:visibility="@{!config.interface.bootstrapDns.isPresent() ? android.view.View.GONE : android.view.View.VISIBLE}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bootstrap_dns_label"
+                        tools:text="8.8.8.8" />
+
+                    <TextView
+                        android:id="@+id/ip4p_prefix_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:labelFor="@+id/ip4p_prefix_text"
+                        android:text="@string/ip4p_prefix"
+                        android:visibility="@{!config.interface.ip4pPrefix.isPresent() ? android.view.View.GONE : android.view.View.VISIBLE}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bootstrap_dns_text" />
+
+                    <TextView
+                        android:id="@+id/ip4p_prefix_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:contentDescription="@string/ip4p_prefix"
+                        android:nextFocusUp="@id/bootstrap_dns_text"
+                        android:nextFocusDown="@id/applications_text"
+                        android:nextFocusForward="@id/applications_text"
+                        android:onClick="@{ClipboardUtils::copyTextView}"
+                        android:text="@{config.interface.ip4pPrefix}"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
+                        android:visibility="@{!config.interface.ip4pPrefix.isPresent() ? android.view.View.GONE : android.view.View.VISIBLE}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ip4p_prefix_label"
+                        tools:text="2001::" />
+
                     <androidx.constraintlayout.widget.Barrier
                         android:id="@+id/amnezia_barrier"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:barrierDirection="bottom"
-                        app:constraint_referenced_ids="transport_packet_magic_header_text,special_junk_i1_text,special_junk_i2_text,special_junk_i3_text,special_junk_i4_text,special_junk_i5_text,header_protection_key_text,content_padding_addition_text,rekey_after_time_text,rekey_timeout_text,reject_after_time_text,keepalive_timeout_text,max_handshake_attempts_text,random_trailers_text,disable_cookies_text" />
+                        app:constraint_referenced_ids="transport_packet_magic_header_text,special_junk_i1_text,special_junk_i2_text,special_junk_i3_text,special_junk_i4_text,special_junk_i5_text,header_protection_key_text,content_padding_addition_text,rekey_after_time_text,rekey_timeout_text,reject_after_time_text,keepalive_timeout_text,max_handshake_attempts_text,random_trailers_text,disable_cookies_text,bootstrap_dns_text,ip4p_prefix_text" />
 
                     <TextView
                         android:id="@+id/applications_label"

@@ -7,6 +7,14 @@ package main
 
 // #cgo LDFLAGS: -llog
 // #include <android/log.h>
+// #include <stdlib.h>
+//
+// awgProtectSocket asks the JNI layer to protect the given socket fd by routing
+// it outside the VPN (VpnService.protect). It returns 0 on success and non-zero
+// on failure. awgEnableSocketProtect records that a tunnel is using IP4P so the
+// JNI layer can protect bootstrap-DNS sockets.
+// int awgProtectSocket(int fd);
+// void awgEnableSocketProtect(int handle);
 import "C"
 
 import (
@@ -191,6 +199,22 @@ func awgGetSocketV6(tunnelHandle int32) int32 {
 		return -1
 	}
 	return int32(fd)
+}
+
+//export awgSetSocketProtect
+func awgSetSocketProtect(tunnelHandle int32) {
+	handle, ok := tunnelHandles[tunnelHandle]
+	if !ok {
+		return
+	}
+	C.awgEnableSocketProtect(C.int(tunnelHandle))
+	// Protect bootstrap DNS sockets so IP4P resolution bypasses the tunnel.
+	handle.device.SetSocketProtectFunc(func(fd int) error {
+		if C.awgProtectSocket(C.int(fd)) != 0 {
+			return fmt.Errorf("socket protect failed for fd %d", fd)
+		}
+		return nil
+	})
 }
 
 //export awgGetConfig

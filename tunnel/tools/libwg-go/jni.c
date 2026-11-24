@@ -14,6 +14,58 @@ extern int awgGetSocketV4(int handle);
 extern int awgGetSocketV6(int handle);
 extern char *awgGetConfig(int handle);
 extern char *awgVersion();
+extern void awgSetSocketProtect(int handle);
+
+/*
+ * Socket protection for IP4P bootstrap DNS.
+ *
+ * The Go backend creates short-lived sockets to query the bootstrap DNS
+ * resolvers while the tunnel is up. Without protection those queries would be
+ * routed back through the VPN itself (a loop) or blocked, so IP4P resolution
+ * fails. We keep a global reference to the active VpnService so the Go side can
+ * call VpnService.protect(fd) on each DNS socket before dialing.
+ */
+static JavaVM *g_vm = NULL;
+static jobject g_vpn_service = NULL;
+
+int awgProtectSocket(int fd)
+{
+	JNIEnv *env;
+	jclass cls;
+	jmethodID mid;
+	jboolean ok;
+	int attach;
+
+	if (!g_vm || !g_vpn_service)
+		return -1;
+
+	attach = (*g_vm)->GetEnv(g_vm, (void **)&env, JNI_VERSION_1_6);
+	if (attach == JNI_EDETACHED) {
+		if ((*g_vm)->AttachCurrentThread(g_vm, (void **)&env, NULL) != JNI_OK)
+			return -1;
+	} else if (attach != JNI_OK) {
+		return -1;
+	}
+
+	cls = (*env)->GetObjectClass(env, g_vpn_service);
+	if (!cls)
+		goto out;
+	mid = (*env)->GetMethodID(env, cls, "protect", "(I)Z");
+	if (!mid)
+		goto out;
+	ok = (*env)->CallBooleanMethod(env, g_vpn_service, mid, fd);
+
+out:
+	if (attach == JNI_EDETACHED)
+		(*g_vm)->DetachCurrentThread(g_vm);
+	return ok ? 0 : -1;
+}
+
+void awgEnableSocketProtect(int handle)
+{
+	/* Reserved for future per-tunnel diagnostics; currently a no-op. */
+	(void)handle;
+}
 
 JNIEXPORT jint JNICALL Java_org_amnezia_awg_GoBackend_awgTurnOn(JNIEnv *env, jclass c, jstring ifname, jint tun_fd, jstring settings)
 {
@@ -46,6 +98,19 @@ JNIEXPORT jint JNICALL Java_org_amnezia_awg_GoBackend_awgGetSocketV4(JNIEnv *env
 JNIEXPORT jint JNICALL Java_org_amnezia_awg_GoBackend_awgGetSocketV6(JNIEnv *env, jclass c, jint handle)
 {
 	return awgGetSocketV6(handle);
+}
+
+/*
+ * Register the active VpnService so the Go backend can protect bootstrap DNS
+ * sockets, then enable protection on the tunnel.
+ */
+JNIEXPORT void JNICALL Java_org_amnezia_awg_GoBackend_awgSetSocketProtect(JNIEnv *env, jclass c, jint handle, jobject vpnService)
+{
+	(*env)->GetJavaVM(env, &g_vm);
+	if (g_vpn_service)
+		(*env)->DeleteGlobalRef(env, g_vpn_service);
+	g_vpn_service = (*env)->NewGlobalRef(env, vpnService);
+	awgSetSocketProtect(handle);
 }
 
 JNIEXPORT jstring JNICALL Java_org_amnezia_awg_GoBackend_awgGetConfig(JNIEnv *env, jclass c, jint handle)

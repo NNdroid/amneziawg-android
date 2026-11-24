@@ -484,6 +484,10 @@ public final class GoBackend implements Backend {
             service.protect(awgGetSocketV4(currentTunnelHandle));
             service.protect(awgGetSocketV6(currentTunnelHandle));
 
+            // Protect IP4P bootstrap DNS sockets so their queries bypass the
+            // tunnel instead of looping back through the VPN being configured.
+            awgSetSocketProtect(currentTunnelHandle, service);
+
             launchStatusJob();
         } else {
             if (currentTunnelHandle == -1) {
