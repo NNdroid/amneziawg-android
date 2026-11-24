@@ -141,17 +141,28 @@ class TunnelDetailFragment : BaseFragment(), MenuProvider {
                     peer.connectionStateText.visibility = View.GONE
                 } else {
                     peer.connectionStateText.text = if (peerStats.isIp4p) {
-                        val host = peerStats.ip4pHost
-                        if (host.isNullOrEmpty()) {
+                        // Prefer the full original endpoint (host:port); fall back
+                        // to the original hostname when the port is not reported.
+                        val orig = peerStats.ip4pOrig?.takeIf { it.isNotEmpty() } ?: peerStats.ip4pHost
+                        if (orig.isNullOrEmpty()) {
                             getString(R.string.connection_state_ip4p, endpoint)
                         } else {
-                            getString(R.string.connection_state_ip4p_host, endpoint, host)
+                            getString(R.string.connection_state_ip4p_host, endpoint, orig)
                         }
                     } else {
                         endpoint
                     }
                     peer.connectionStateLabel.visibility = View.VISIBLE
                     peer.connectionStateText.visibility = View.VISIBLE
+                }
+                val ip4pUpdated = if (peerStats?.isIp4p == true) peerStats.ip4pUpdatedEpochMillis else 0L
+                if (ip4pUpdated == 0L) {
+                    peer.ip4pUpdatedLabel.visibility = View.GONE
+                    peer.ip4pUpdatedText.visibility = View.GONE
+                } else {
+                    peer.ip4pUpdatedText.text = QuantityFormatter.formatEpochAgo(ip4pUpdated)
+                    peer.ip4pUpdatedLabel.visibility = View.VISIBLE
+                    peer.ip4pUpdatedText.visibility = View.VISIBLE
                 }
             }
         } catch (e: Throwable) {
@@ -164,6 +175,8 @@ class TunnelDetailFragment : BaseFragment(), MenuProvider {
                 peer.latestHandshakeText.visibility = View.GONE
                 peer.connectionStateLabel.visibility = View.GONE
                 peer.connectionStateText.visibility = View.GONE
+                peer.ip4pUpdatedLabel.visibility = View.GONE
+                peer.ip4pUpdatedText.visibility = View.GONE
             }
         }
     }

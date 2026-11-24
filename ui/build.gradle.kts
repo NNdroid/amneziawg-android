@@ -18,6 +18,23 @@ val versionCodeValue: Int = providers.gradleProperty("amneziawgVersionCode")
     )
     .get()
 
+// versionName = v1.0.yyyyMMdd-hash7(tagcount+1), mirroring the CI release tag
+// format in .github/workflows/build.yml. A manual override is still possible
+// with -PamneziawgVersionName=N for emergency/backport builds.
+val versionNameValue: String = providers.gradleProperty("amneziawgVersionName")
+    .orElse(
+        providers.exec {
+            commandLine("git", "log", "-1", "--format=%cd", "--date=format:%Y%m%d")
+        }.standardOutput.asText.zip(
+            providers.exec {
+                commandLine("git", "rev-parse", "--short=7", "HEAD")
+            }.standardOutput.asText
+        ) { date, hash ->
+            "v1.0.${date.trim()}-${hash.trim()}$versionCodeValue"
+        }
+    )
+    .get()
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -35,7 +52,7 @@ android {
         applicationId = pkg
         targetSdk = 36
         versionCode = versionCodeValue
-        versionName = providers.gradleProperty("amneziawgVersionName").get()
+        versionName = versionNameValue
         buildConfigField("int", "MIN_SDK_VERSION", minSdk.toString())
     }
     compileOptions {

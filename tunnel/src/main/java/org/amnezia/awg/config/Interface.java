@@ -71,7 +71,6 @@ public final class Interface {
     private final Optional<String> maxHandshakeAttempts;
     private final Optional<String> randomTrailers;
     private final Optional<String> disableCookies;
-    private final Optional<String> ip4p;
     private final Optional<String> bootstrapDns;
     private final Optional<String> ip4pPrefix;
 
@@ -110,7 +109,6 @@ public final class Interface {
         maxHandshakeAttempts = builder.maxHandshakeAttempts;
         randomTrailers = builder.randomTrailers;
         disableCookies = builder.disableCookies;
-        ip4p = builder.ip4p;
         bootstrapDns = builder.bootstrapDns;
         ip4pPrefix = builder.ip4pPrefix;
     }
@@ -226,9 +224,6 @@ public final class Interface {
                 case "disablecookies":
                     builder.parseDisableCookies(attribute.getValue());
                     break;
-                case "ip4p":
-                    builder.parseIp4p(attribute.getValue());
-                    break;
                 case "bootstrapdns":
                     builder.parseBootstrapDns(attribute.getValue());
                     break;
@@ -281,7 +276,6 @@ public final class Interface {
                 && maxHandshakeAttempts.equals(other.maxHandshakeAttempts)
                 && randomTrailers.equals(other.randomTrailers)
                 && disableCookies.equals(other.disableCookies)
-                && ip4p.equals(other.ip4p)
                 && bootstrapDns.equals(other.bootstrapDns)
                 && ip4pPrefix.equals(other.ip4pPrefix);
     }
@@ -589,15 +583,6 @@ public final class Interface {
     }
 
     /**
-     * Returns whether the IP4P (IPv4 privacy) feature is enabled for the AmneziaWG interface.
-     *
-     * @return the ip4p value, or {@code Optional.empty()} if none is configured
-     */
-    public Optional<String> getIp4p() {
-        return ip4p;
-    }
-
-    /**
      * Returns the bootstrap DNS servers used to resolve IP4P endpoints.
      *
      * @return the bootstrap DNS servers, or {@code Optional.empty()} if none is configured
@@ -650,7 +635,6 @@ public final class Interface {
         hash = 31 * hash + maxHandshakeAttempts.hashCode();
         hash = 31 * hash + randomTrailers.hashCode();
         hash = 31 * hash + disableCookies.hashCode();
-        hash = 31 * hash + ip4p.hashCode();
         hash = 31 * hash + bootstrapDns.hashCode();
         hash = 31 * hash + ip4pPrefix.hashCode();
         return hash;
@@ -717,7 +701,6 @@ public final class Interface {
         maxHandshakeAttempts.ifPresent(mha -> sb.append("MaxHandshakeAttempts = ").append(mha).append('\n'));
         randomTrailers.ifPresent(rt -> sb.append("RandomTrailers = ").append(rt).append('\n'));
         disableCookies.ifPresent(dc -> sb.append("DisableCookies = ").append(dc).append('\n'));
-        ip4p.ifPresent(ip -> sb.append("IP4P = ").append(ip).append('\n'));
         sb.append("PrivateKey = ").append(keyPair.getPrivateKey().toBase64()).append('\n');
         return sb.toString();
     }
@@ -757,7 +740,6 @@ public final class Interface {
         maxHandshakeAttempts.ifPresent(mha -> sb.append("max_handshake_attempts=").append(mha).append('\n'));
         randomTrailers.ifPresent(rt -> sb.append("random_trailers=").append(toUapiBool(rt)).append('\n'));
         disableCookies.ifPresent(dc -> sb.append("disable_cookies=").append(toUapiBool(dc)).append('\n'));
-        ip4p.ifPresent(ip -> sb.append("ip4p=").append(toUapiBool(ip)).append('\n'));
         bootstrapDns.ifPresent(bd -> sb.append("bootstrap_dns=").append(bd).append('\n'));
         ip4pPrefix.ifPresent(prefix -> sb.append("ip4p_prefix=").append(prefix).append('\n'));
         return sb.toString();
@@ -851,8 +833,6 @@ public final class Interface {
         private Optional<String> randomTrailers = Optional.empty();
         // Defaults to not present.
         private Optional<String> disableCookies = Optional.empty();
-        // Defaults to not present.
-        private Optional<String> ip4p = Optional.empty();
         // Defaults to not present.
         private Optional<String> bootstrapDns = Optional.empty();
         // Defaults to not present.
@@ -1150,10 +1130,6 @@ public final class Interface {
             return setDisableCookies(disableCookies);
         }
 
-        public Builder parseIp4p(final String ip4p) throws BadConfigException {
-            return setIp4p(ip4p);
-        }
-
         public Builder parseBootstrapDns(final String bootstrapDns) throws BadConfigException {
             return setBootstrapDns(bootstrapDns);
         }
@@ -1401,15 +1377,6 @@ public final class Interface {
                 this.disableCookies = Optional.empty();
             } else {
                 this.disableCookies = Optional.of(disableCookies.trim());
-            }
-            return this;
-        }
-
-        public Builder setIp4p(final String ip4p) throws BadConfigException {
-            if (ip4p == null || ip4p.trim().isEmpty()) {
-                this.ip4p = Optional.empty();
-            } else {
-                this.ip4p = Optional.of(ip4p.trim());
             }
             return this;
         }

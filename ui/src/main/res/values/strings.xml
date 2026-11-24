@@ -185,13 +185,12 @@
     <string name="max_handshake_attempts">Max handshake attempts</string>
     <string name="random_trailers">Random trailers</string>
     <string name="disable_cookies">Disable cookies</string>
-    <string name="ip4p">IP4P (IPv4 privacy)</string>
-    <string name="ip4p_section_title">IP4P / privacy</string>
-    <string name="bootstrap_dns">Bootstrap DNS servers</string>
+    <string name="bootstrap_dns">Bootstrap DNS server</string>
     <string name="ip4p_prefix">IP4P prefix</string>
     <string name="connection_state">Connection address</string>
     <string name="connection_state_ip4p">IP4P %1$s</string>
     <string name="connection_state_ip4p_host">IP4P %1$s (%2$s)</string>
+    <string name="ip4p_updated">IP4P updated</string>
     <string name="multiple_tunnels_summary_off">Turning on one tunnel will turn off others</string>
     <string name="multiple_tunnels_summary_on">Multiple tunnels may be turned on simultaneously</string>
     <string name="multiple_tunnels_title">Allow multiple simultaneous tunnels</string>

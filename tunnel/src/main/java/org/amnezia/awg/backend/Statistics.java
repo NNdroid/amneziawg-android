@@ -24,9 +24,13 @@ public class Statistics {
      * A snapshot of a peer's statistics, including its current connection
      * address. {@code endpoint} is the real decoded address the backend is
      * connected to; when {@code isIp4p} is true the peer uses an IP4P address
-     * and {@code ip4pHost} holds the original hostname that resolves to it.
+     * and {@code ip4pHost} holds the original hostname that resolves to it,
+     * {@code ip4pOrig} the full original endpoint (host:port) as configured,
+     * and {@code ip4pUpdatedEpochMillis} when the IP4P endpoint was last
+     * successfully resolved.
      */
-    public record PeerStats(String endpoint, boolean isIp4p, String ip4pHost,
+    public record PeerStats(String endpoint, boolean isIp4p, String ip4pHost, String ip4pOrig,
+                            long ip4pUpdatedEpochMillis,
                             long rxBytes, long txBytes, long latestHandshakeEpochMillis) { }
     private final Map<Key, PeerStats> stats = new HashMap<>();
     private long lastTouched = SystemClock.elapsedRealtime();
@@ -47,10 +51,14 @@ public class Statistics {
      * @param endpoint          The real decoded connection address, or {@code null} if unknown.
      * @param isIp4p            Whether the peer uses an IP4P address.
      * @param ip4pHost          The original hostname for an IP4P peer, or {@code null}.
+     * @param ip4pOrig          The full original endpoint (host:port) for an IP4P peer, or {@code null}.
+     * @param ip4pUpdatedMillis When the IP4P endpoint was last resolved, in epoch millis, or 0.
      */
     void add(final Key key, final long rxBytes, final long txBytes, final long latestHandshake,
-             @Nullable final String endpoint, final boolean isIp4p, @Nullable final String ip4pHost) {
-        stats.put(key, new PeerStats(endpoint, isIp4p, ip4pHost, rxBytes, txBytes, latestHandshake));
+             @Nullable final String endpoint, final boolean isIp4p, @Nullable final String ip4pHost,
+             @Nullable final String ip4pOrig, final long ip4pUpdatedMillis) {
+        stats.put(key, new PeerStats(endpoint, isIp4p, ip4pHost, ip4pOrig, ip4pUpdatedMillis,
+                rxBytes, txBytes, latestHandshake));
         lastTouched = SystemClock.elapsedRealtime();
     }
 

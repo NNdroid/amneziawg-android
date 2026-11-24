@@ -123,16 +123,20 @@ public final class GoBackend implements Backend {
         String endpoint = null;
         boolean isIp4p = false;
         String ip4pHost = null;
+        String ip4pOrig = null;
+        long ip4pUpdatedMSec = 0;
         for (final String line : config.split("\\n")) {
             if (line.startsWith("public_key=")) {
                 if (key != null)
-                    stats.add(key, rx, tx, latestHandshakeMSec, endpoint, isIp4p, ip4pHost);
+                    stats.add(key, rx, tx, latestHandshakeMSec, endpoint, isIp4p, ip4pHost, ip4pOrig, ip4pUpdatedMSec);
                 rx = 0;
                 tx = 0;
                 latestHandshakeMSec = 0;
                 endpoint = null;
                 isIp4p = false;
                 ip4pHost = null;
+                ip4pOrig = null;
+                ip4pUpdatedMSec = 0;
                 try {
                     key = Key.fromHex(line.substring(11));
                 } catch (final KeyFormatException ignored) {
@@ -182,10 +186,30 @@ public final class GoBackend implements Backend {
                 if (key == null)
                     continue;
                 ip4pHost = line.substring(10);
+            } else if (line.startsWith("ip4p_orig=")) {
+                if (key == null)
+                    continue;
+                ip4pOrig = line.substring(10);
+            } else if (line.startsWith("ip4p_update_sec=")) {
+                if (key == null)
+                    continue;
+                try {
+                    ip4pUpdatedMSec += Long.parseLong(line.substring(16)) * 1000;
+                } catch (final NumberFormatException ignored) {
+                    ip4pUpdatedMSec = 0;
+                }
+            } else if (line.startsWith("ip4p_update_nsec=")) {
+                if (key == null)
+                    continue;
+                try {
+                    ip4pUpdatedMSec += Long.parseLong(line.substring(17)) / 1000000;
+                } catch (final NumberFormatException ignored) {
+                    ip4pUpdatedMSec = 0;
+                }
             }
         }
         if (key != null)
-            stats.add(key, rx, tx, latestHandshakeMSec, endpoint, isIp4p, ip4pHost);
+            stats.add(key, rx, tx, latestHandshakeMSec, endpoint, isIp4p, ip4pHost, ip4pOrig, ip4pUpdatedMSec);
         return stats;
     }
 
