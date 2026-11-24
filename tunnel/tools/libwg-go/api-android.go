@@ -9,10 +9,12 @@ package main
 // #include <android/log.h>
 // #include <stdlib.h>
 //
-// awgProtectSocket asks the JNI layer to protect the given socket fd by routing
-// it outside the VPN (VpnService.protect). It returns 0 on success and non-zero
-// on failure. awgEnableSocketProtect records that a tunnel is using IP4P so the
-// JNI layer can protect bootstrap-DNS sockets.
+// /*
+//  * awgProtectSocket asks the JNI layer to protect the given socket fd by
+//  * routing it outside the VPN (VpnService.protect). It returns 0 on success
+//  * and non-zero on failure. awgEnableSocketProtect records that a tunnel is
+//  * using IP4P so the JNI layer can protect bootstrap-DNS sockets.
+//  */
 // int awgProtectSocket(int fd);
 // void awgEnableSocketProtect(int handle);
 import "C"
