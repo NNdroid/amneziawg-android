@@ -785,12 +785,78 @@
                                 android:id="@+id/disable_cookies_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:imeOptions="actionDone"
+                                android:imeOptions="actionNext"
                                 android:inputType="textNoSuggestions"
                                 android:nextFocusUp="@id/random_trailers_text"
+                                android:nextFocusDown="@id/ip4p_text"
+                                android:nextFocusForward="@id/ip4p_text"
+                                android:text="@={config.interface.disableCookies}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ip4p_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:hint="@string/ip4p"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/disable_cookies_layout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/ip4p_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="textNoSuggestions"
+                                android:nextFocusUp="@id/disable_cookies_text"
+                                android:nextFocusDown="@id/bootstrap_dns_text"
+                                android:nextFocusForward="@id/bootstrap_dns_text"
+                                android:text="@={config.interface.ip4p}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/bootstrap_dns_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:hint="@string/bootstrap_dns"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ip4p_layout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/bootstrap_dns_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="textNoSuggestions"
+                                android:nextFocusUp="@id/ip4p_text"
+                                android:nextFocusDown="@id/ip4p_prefix_text"
+                                android:nextFocusForward="@id/ip4p_prefix_text"
+                                android:text="@={config.interface.bootstrapDns}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ip4p_prefix_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:hint="@string/ip4p_prefix"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/bootstrap_dns_layout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/ip4p_prefix_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="textNoSuggestions"
+                                android:nextFocusUp="@id/bootstrap_dns_text"
                                 android:nextFocusDown="@id/set_excluded_applications"
                                 android:nextFocusForward="@id/set_excluded_applications"
-                                android:text="@={config.interface.disableCookies}" />
+                                android:text="@={config.interface.ip4pPrefix}" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.button.MaterialButton
@@ -799,7 +865,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
-                            android:nextFocusUp="@id/disable_cookies_text"
+                            android:nextFocusUp="@id/ip4p_prefix_text"
                             android:nextFocusDown="@id/peers_layout"
                             android:nextFocusForward="@id/peers_layout"
                             android:onClick="@{fragment::onRequestSetExcludedIncludedApplications}"
@@ -808,7 +874,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/disable_cookies_layout"
+                            app:layout_constraintTop_toBottomOf="@id/ip4p_prefix_layout"
                             app:rippleColor="?attr/colorSecondary"
                             tools:text="4 excluded applications" />
                     </androidx.constraintlayout.widget.ConstraintLayout>

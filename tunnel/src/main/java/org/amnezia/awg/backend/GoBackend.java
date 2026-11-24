@@ -120,13 +120,19 @@ public final class GoBackend implements Backend {
         long rx = 0;
         long tx = 0;
         long latestHandshakeMSec = 0;
+        String endpoint = null;
+        boolean isIp4p = false;
+        String ip4pHost = null;
         for (final String line : config.split("\\n")) {
             if (line.startsWith("public_key=")) {
                 if (key != null)
-                    stats.add(key, rx, tx, latestHandshakeMSec);
+                    stats.add(key, rx, tx, latestHandshakeMSec, endpoint, isIp4p, ip4pHost);
                 rx = 0;
                 tx = 0;
                 latestHandshakeMSec = 0;
+                endpoint = null;
+                isIp4p = false;
+                ip4pHost = null;
                 try {
                     key = Key.fromHex(line.substring(11));
                 } catch (final KeyFormatException ignored) {
@@ -164,10 +170,22 @@ public final class GoBackend implements Backend {
                 } catch (final NumberFormatException ignored) {
                     latestHandshakeMSec = 0;
                 }
+            } else if (line.startsWith("endpoint=")) {
+                if (key == null)
+                    continue;
+                endpoint = line.substring(9);
+            } else if (line.startsWith("endpoint_ip4p=")) {
+                if (key == null)
+                    continue;
+                isIp4p = line.substring(13).equals("1");
+            } else if (line.startsWith("ip4p_host=")) {
+                if (key == null)
+                    continue;
+                ip4pHost = line.substring(10);
             }
         }
         if (key != null)
-            stats.add(key, rx, tx, latestHandshakeMSec);
+            stats.add(key, rx, tx, latestHandshakeMSec, endpoint, isIp4p, ip4pHost);
         return stats;
     }
 

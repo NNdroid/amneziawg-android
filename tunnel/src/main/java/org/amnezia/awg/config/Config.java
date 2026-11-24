@@ -175,10 +175,14 @@ public final class Config {
      */
     public String toAwgUserspaceString() {
         final StringBuilder sb = new StringBuilder();
+        // When bootstrap DNS servers are configured, the backend resolves and
+        // decodes IP4P endpoints itself, so raw hostnames are emitted rather
+        // than pre-resolved numeric addresses.
+        final boolean resolveEndpoints = !interfaze.getBootstrapDns().isPresent();
         sb.append(interfaze.toAwgUserspaceString());
         sb.append("replace_peers=true\n");
         for (final Peer peer : peers)
-            sb.append(peer.toAwgUserspaceString());
+            sb.append(peer.toAwgUserspaceString(resolveEndpoints));
         return sb.toString();
     }
 

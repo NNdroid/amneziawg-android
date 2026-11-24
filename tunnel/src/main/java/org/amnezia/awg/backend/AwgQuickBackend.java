@@ -196,7 +196,7 @@ public final class AwgQuickBackend implements Backend {
             if (parts.length != 8)
                 continue;
             try {
-                stats.add(Key.fromBase64(parts[0]), Long.parseLong(parts[5]), Long.parseLong(parts[6]), Long.parseLong(parts[4]) * 1000);
+                stats.add(Key.fromBase64(parts[0]), Long.parseLong(parts[5]), Long.parseLong(parts[6]), Long.parseLong(parts[4]) * 1000, null, false, null);
             } catch (final Exception ignored) {
             }
         }

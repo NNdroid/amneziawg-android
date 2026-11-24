@@ -1,6 +1,9 @@
 [submodule "tunnel/tools/amneziawg-tools"]
 	path = tunnel/tools/amneziawg-tools
-	url = https://github.com/amnezia-vpn/amneziawg-tools
+	url = https://github.com/NNdroid/amneziawg-tools
 [submodule "tunnel/tools/elf-cleaner"]
 	path = tunnel/tools/elf-cleaner
 	url = https://github.com/termux/termux-elf-cleaner
+[submodule "tunnel/tools/amneziawg-go"]
+	path = tunnel/tools/amneziawg-go
+	url = https://github.com/NNdroid/amneziawg-go

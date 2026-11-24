@@ -135,6 +135,24 @@ class TunnelDetailFragment : BaseFragment(), MenuProvider {
                     peer.latestHandshakeLabel.visibility = View.VISIBLE
                     peer.latestHandshakeText.visibility = View.VISIBLE
                 }
+                val endpoint = peerStats?.endpoint
+                if (endpoint.isNullOrEmpty()) {
+                    peer.connectionStateLabel.visibility = View.GONE
+                    peer.connectionStateText.visibility = View.GONE
+                } else {
+                    peer.connectionStateText.text = if (peerStats.isIp4p) {
+                        val host = peerStats.ip4pHost
+                        if (host.isNullOrEmpty()) {
+                            getString(R.string.connection_state_ip4p, endpoint)
+                        } else {
+                            getString(R.string.connection_state_ip4p_host, endpoint, host)
+                        }
+                    } else {
+                        endpoint
+                    }
+                    peer.connectionStateLabel.visibility = View.VISIBLE
+                    peer.connectionStateText.visibility = View.VISIBLE
+                }
             }
         } catch (e: Throwable) {
             for (i in 0 until binding.peersLayout.childCount) {
@@ -144,6 +162,8 @@ class TunnelDetailFragment : BaseFragment(), MenuProvider {
                 peer.transferText.visibility = View.GONE
                 peer.latestHandshakeLabel.visibility = View.GONE
                 peer.latestHandshakeText.visibility = View.GONE
+                peer.connectionStateLabel.visibility = View.GONE
+                peer.connectionStateText.visibility = View.GONE
             }
         }
     }

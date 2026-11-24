@@ -189,15 +189,23 @@ public final class Peer {
      * Serializes the {@code Peer} for use with the AmneziaWG cross-platform userspace API. Note
      * that not all attributes are included in this representation.
      *
+     * @param resolveEndpoints whether to resolve DNS hostnames before emitting the endpoint. Pass
+     *                         {@code false} when the interface uses IP4P, in which case the raw
+     *                         host is emitted and the backend is responsible for resolving and
+     *                         decoding the IP4P address.
      * @return the {@code Peer} represented as a series of "key=value" lines
      */
-    public String toAwgUserspaceString() {
+    public String toAwgUserspaceString(final boolean resolveEndpoints) {
         final StringBuilder sb = new StringBuilder();
         // The order here is important: public_key signifies the beginning of a new peer.
         sb.append("public_key=").append(publicKey.toHex()).append('\n');
         for (final InetNetwork allowedIp : allowedIps)
             sb.append("allowed_ip=").append(allowedIp).append('\n');
-        endpoint.flatMap(InetEndpoint::getResolved).ifPresent(ep -> sb.append("endpoint=").append(ep).append('\n'));
+        if (resolveEndpoints) {
+            endpoint.flatMap(InetEndpoint::getResolved).ifPresent(ep -> sb.append("endpoint=").append(ep).append('\n'));
+        } else {
+            endpoint.ifPresent(ep -> sb.append("endpoint=").append(ep.getHost()).append(':').append(ep.getPort()).append('\n'));
+        }
         persistentKeepalive.ifPresent(pk -> sb.append("persistent_keepalive_interval=").append(pk).append('\n'));
         preSharedKey.ifPresent(psk -> sb.append("preshared_key=").append(psk.toHex()).append('\n'));
         return sb.toString();
@@ -287,17 +295,60 @@ public final class Peer {
 
         /**
          * Sets the persistent keepalive from a string. Empty or {@code "off"} disables it
-         * (WireGuard compatibility); otherwise the trimmed value is stored as-is.
+         * (WireGuard compatibility). Otherwise the trimmed value must be a single number or a
+         * "lo-hi" range (e.g. {@code "22-30"}), matching what the AmneziaWG backend accepts.
+         *
+         * @throws BadConfigException if the value is not a valid keepalive number/range
          */
         public Builder setPersistentKeepalive(final String persistentKeepalive)
                 throws BadConfigException {
             final String trimmed = persistentKeepalive.trim();
             if (trimmed.isEmpty() || trimmed.equalsIgnoreCase("off")) {
                 this.persistentKeepalive = Optional.empty();
-            } else {
-                this.persistentKeepalive = Optional.of(trimmed);
+                return this;
             }
+            validateKeepaliveRange(trimmed);
+            this.persistentKeepalive = Optional.of(trimmed);
             return this;
+        }
+
+        /**
+         * Validates a keepalive value that is either a single non-negative number or a "lo-hi"
+         * range (inclusive, lo &lt;= hi). This mirrors the AmneziaWG backend's {@code u16_range}
+         * semantics so that malformed values are rejected at parse time rather than being silently
+         * passed through to the tunnel.
+         */
+        private static void validateKeepaliveRange(final String value) throws BadConfigException {
+            final String[] parts = value.split("-", -1);
+            if (parts.length < 1 || parts.length > 2) {
+                throw invalidKeepalive(value);
+            }
+            final long lo = parseKeepaliveNumber(parts[0], value);
+            final long hi = parts.length == 2 ? parseKeepaliveNumber(parts[1], value) : lo;
+            if (hi < lo) {
+                throw invalidKeepalive(value);
+            }
+        }
+
+        private static long parseKeepaliveNumber(final String part, final String value)
+                throws BadConfigException {
+            if (part.isEmpty()) {
+                throw invalidKeepalive(value);
+            }
+            try {
+                final long number = Long.parseLong(part, 10);
+                if (number < 0 || number > 0xffffL) {
+                    throw invalidKeepalive(value);
+                }
+                return number;
+            } catch (final NumberFormatException e) {
+                throw invalidKeepalive(value);
+            }
+        }
+
+        private static BadConfigException invalidKeepalive(final String value) {
+            return new BadConfigException(Section.PEER, Location.PERSISTENT_KEEPALIVE,
+                    value, new NumberFormatException(value));
         }
 
         public Builder setPreSharedKey(final Key preSharedKey) {

@@ -20,7 +20,14 @@ import androidx.annotation.Nullable;
  */
 @NonNullForAll
 public class Statistics {
-    public record PeerStats(long rxBytes, long txBytes, long latestHandshakeEpochMillis) { }
+    /**
+     * A snapshot of a peer's statistics, including its current connection
+     * address. {@code endpoint} is the real decoded address the backend is
+     * connected to; when {@code isIp4p} is true the peer uses an IP4P address
+     * and {@code ip4pHost} holds the original hostname that resolves to it.
+     */
+    public record PeerStats(String endpoint, boolean isIp4p, String ip4pHost,
+                            long rxBytes, long txBytes, long latestHandshakeEpochMillis) { }
     private final Map<Key, PeerStats> stats = new HashMap<>();
     private long lastTouched = SystemClock.elapsedRealtime();
 
@@ -37,9 +44,13 @@ public class Statistics {
      *                          the provided {@link Key}. This value is in bytes.
      * @param latestHandshake   The timestamp of the latest handshake for the {@link org.amnezia.config.Peer}
      *                          referenced by the provided {@link Key}. The value is in epoch milliseconds.
+     * @param endpoint          The real decoded connection address, or {@code null} if unknown.
+     * @param isIp4p            Whether the peer uses an IP4P address.
+     * @param ip4pHost          The original hostname for an IP4P peer, or {@code null}.
      */
-    void add(final Key key, final long rxBytes, final long txBytes, final long latestHandshake) {
-        stats.put(key, new PeerStats(rxBytes, txBytes, latestHandshake));
+    void add(final Key key, final long rxBytes, final long txBytes, final long latestHandshake,
+             @Nullable final String endpoint, final boolean isIp4p, @Nullable final String ip4pHost) {
+        stats.put(key, new PeerStats(endpoint, isIp4p, ip4pHost, rxBytes, txBytes, latestHandshake));
         lastTouched = SystemClock.elapsedRealtime();
     }
 

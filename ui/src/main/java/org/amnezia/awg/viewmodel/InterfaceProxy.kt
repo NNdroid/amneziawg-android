@@ -229,6 +229,27 @@ class InterfaceProxy : BaseObservable, Parcelable {
         }
 
     @get:Bindable
+    var ip4p: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.ip4p)
+        }
+
+    @get:Bindable
+    var bootstrapDns: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.bootstrapDns)
+        }
+
+    @get:Bindable
+    var ip4pPrefix: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.ip4pPrefix)
+        }
+
+    @get:Bindable
     var privateKey: String = ""
         set(value) {
             field = value
@@ -276,6 +297,9 @@ class InterfaceProxy : BaseObservable, Parcelable {
         maxHandshakeAttempts = parcel.readString() ?: ""
         randomTrailers = parcel.readString() ?: ""
         disableCookies = parcel.readString() ?: ""
+        ip4p = parcel.readString() ?: ""
+        bootstrapDns = parcel.readString() ?: ""
+        ip4pPrefix = parcel.readString() ?: ""
         privateKey = parcel.readString() ?: ""
     }
 
@@ -312,6 +336,9 @@ class InterfaceProxy : BaseObservable, Parcelable {
         maxHandshakeAttempts = other.maxHandshakeAttempts.orElse("")
         randomTrailers = other.randomTrailers.orElse("")
         disableCookies = other.disableCookies.orElse("")
+        ip4p = other.ip4p.orElse("")
+        bootstrapDns = other.bootstrapDns.orElse("")
+        ip4pPrefix = other.ip4pPrefix.orElse("")
         val keyPair = other.keyPair
         privateKey = keyPair.privateKey.toBase64()
     }
@@ -361,6 +388,9 @@ class InterfaceProxy : BaseObservable, Parcelable {
         if (maxHandshakeAttempts.isNotEmpty()) builder.parseMaxHandshakeAttempts(maxHandshakeAttempts)
         if (randomTrailers.isNotEmpty()) builder.parseRandomTrailers(randomTrailers)
         if (disableCookies.isNotEmpty()) builder.parseDisableCookies(disableCookies)
+        if (ip4p.isNotEmpty()) builder.parseIp4p(ip4p)
+        if (bootstrapDns.isNotEmpty()) builder.parseBootstrapDns(bootstrapDns)
+        if (ip4pPrefix.isNotEmpty()) builder.parseIp4pPrefix(ip4pPrefix)
         if (privateKey.isNotEmpty()) builder.parsePrivateKey(privateKey)
         return builder.build()
     }
@@ -397,6 +427,9 @@ class InterfaceProxy : BaseObservable, Parcelable {
         dest.writeString(maxHandshakeAttempts)
         dest.writeString(randomTrailers)
         dest.writeString(disableCookies)
+        dest.writeString(ip4p)
+        dest.writeString(bootstrapDns)
+        dest.writeString(ip4pPrefix)
         dest.writeString(privateKey)
     }
 

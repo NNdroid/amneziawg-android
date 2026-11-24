@@ -1,4 +1,4 @@
-name: Android build (signed AAB / debug APK)
+name: Android build
 run-name: "Android • ${{ inputs.target }} • ${{ inputs.ref || github.ref_name }}"
 
 on:
@@ -8,14 +8,23 @@ on:
         description: "What to build"
         type: choice
         required: true
-        default: release_aab
+        default: all
         options:
-        - release_aab
-        - debug_apk
+        - all        # release APK + release AAB + debug APK
+        - release    # release APK + release AAB
+        - debug      # debug APK only
+      publish:
+        description: "Publish release APK to a GitHub Release (auto-create tag)"
+        type: boolean
+        required: false
+        default: false
       ref:
         description: "Git ref (branch/tag/sha)"
         required: false
         default: "master"
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -52,16 +61,22 @@ jobs:
       run: |
         set -euo pipefail
         case "${{ inputs.target }}" in
-          release_aab)
-            echo "gradle_task=bundleRelease" >> "$GITHUB_OUTPUT"
-            echo "kind=aab" >> "$GITHUB_OUTPUT"
-            echo "artifact_name=release-aab" >> "$GITHUB_OUTPUT"
+          all)
+            echo "gradle_tasks=bundleRelease assembleRelease assembleDebug" >> "$GITHUB_OUTPUT"
+            echo "has_release=true" >> "$GITHUB_OUTPUT"
+            echo "has_debug=true" >> "$GITHUB_OUTPUT"
             echo "needs_signing=true" >> "$GITHUB_OUTPUT"
             ;;
-          debug_apk)
-            echo "gradle_task=assembleDebug" >> "$GITHUB_OUTPUT"
-            echo "kind=apk" >> "$GITHUB_OUTPUT"
-            echo "artifact_name=debug-apk" >> "$GITHUB_OUTPUT"
+          release)
+            echo "gradle_tasks=bundleRelease assembleRelease" >> "$GITHUB_OUTPUT"
+            echo "has_release=true" >> "$GITHUB_OUTPUT"
+            echo "has_debug=false" >> "$GITHUB_OUTPUT"
+            echo "needs_signing=true" >> "$GITHUB_OUTPUT"
+            ;;
+          debug)
+            echo "gradle_tasks=assembleDebug" >> "$GITHUB_OUTPUT"
+            echo "has_release=false" >> "$GITHUB_OUTPUT"
+            echo "has_debug=true" >> "$GITHUB_OUTPUT"
             echo "needs_signing=false" >> "$GITHUB_OUTPUT"
             ;;
           *)
@@ -84,62 +99,165 @@ jobs:
         echo "${KEYSTORE_B64}" | base64 --decode > release.keystore.jks
         echo "KEYSTORE_PATH=${PWD}/release.keystore.jks" >> "$GITHUB_ENV"
 
+    - name: Run unit tests
+      shell: bash
+      run: |
+        set -euo pipefail
+        chmod +x ./gradlew
+        ./gradlew --no-daemon --stacktrace :tunnel:testDebugUnitTest
+
     - name: Build
       shell: bash
       run: |
         set -euo pipefail
         chmod +x ./gradlew
-        ./gradlew --no-daemon --stacktrace ${{ steps.cfg.outputs.gradle_task }}
+        # shellcheck disable=SC2086
+        ./gradlew --no-daemon --stacktrace ${{ steps.cfg.outputs.gradle_tasks }}
 
-    - name: Locate built artifact
+    - name: Locate built artifacts
       id: locate
       shell: bash
       run: |
         set -euo pipefail
-        
-        if [[ "${{ steps.cfg.outputs.kind }}" == "aab" ]]; then
-          FILE="./ui/build/outputs/bundle/release/ui-release.aab"
-        else
-          FILE="./ui/build/outputs/apk/debug/ui-debug.apk"
+
+        if [[ "${{ steps.cfg.outputs.has_release }}" == "true" ]]; then
+          # Release APKs are unsigned (no signingConfig in gradle), so AGP
+          # names them ui-release-unsigned.apk; apksigner signs it below.
+          APK="./ui/build/outputs/apk/release/ui-release-unsigned.apk"
+          AAB="./ui/build/outputs/bundle/release/ui-release.aab"
+          [[ -s "${APK}" ]] || { echo "Built artifact not found: ${APK}" >&2; exit 1; }
+          [[ -s "${AAB}" ]] || { echo "Built artifact not found: ${AAB}" >&2; exit 1; }
+          echo "built_apk=${APK}" >> "$GITHUB_OUTPUT"
+          echo "built_aab=${AAB}" >> "$GITHUB_OUTPUT"
         fi
-        
-        if [[ -z "${FILE}" ]]; then
-          echo "Built file not found" >&2
-          exit 1
+
+        if [[ "${{ steps.cfg.outputs.has_debug }}" == "true" ]]; then
+          DEBUG="./ui/build/outputs/apk/debug/ui-debug.apk"
+          [[ -s "${DEBUG}" ]] || { echo "Built artifact not found: ${DEBUG}" >&2; exit 1; }
+          echo "built_debug=${DEBUG}" >> "$GITHUB_OUTPUT"
         fi
-        
-        echo "built_file=${FILE}" >> "$GITHUB_OUTPUT"
 
     - name: Sign AAB
-      if: ${{ steps.cfg.outputs.needs_signing == 'true' }}
+      if: ${{ steps.cfg.outputs.has_release == 'true' }}
       id: sign
       shell: bash
       env:
         KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       run: |
         set -euo pipefail
-        
-        AAB="${{ steps.locate.outputs.built_file }}"
+
+        AAB="${{ steps.locate.outputs.built_aab }}"
         SIGNED_AAB="${AAB%.aab}-signed.aab"
-        
-        if [[ -z "${KEYSTORE_PASSWORD}" || -z "${KEY_ALIAS}" ]]; then
-          echo "Missing one of secrets: ANDROID_KEYSTORE_PASSWORD / ANDROID_KEY_ALIAS" >&2
+
+        if [[ -z "${KEYSTORE_PASSWORD}" || -z "${KEY_PASSWORD}" || -z "${KEY_ALIAS}" ]]; then
+          echo "Missing one of secrets: ANDROID_KEYSTORE_PASSWORD / ANDROID_KEY_PASSWORD / ANDROID_KEY_ALIAS" >&2
           exit 1
         fi
-        
+
         jarsigner \
           -keystore "${KEYSTORE_PATH}" \
           -storepass "${KEYSTORE_PASSWORD}" \
+          -keypass "${KEY_PASSWORD}" \
           -signedjar "${SIGNED_AAB}" \
           "${AAB}" \
           "${KEY_ALIAS}"
-        
-        echo "final_file=${SIGNED_AAB}" >> "$GITHUB_OUTPUT"
 
-    - name: Upload artifact
+        if [[ ! -s "${SIGNED_AAB}" ]]; then
+          echo "jarsigner did not produce ${SIGNED_AAB}" >&2
+          exit 1
+        fi
+
+        echo "signed_aab=${SIGNED_AAB}" >> "$GITHUB_OUTPUT"
+
+    - name: Sign APK
+      if: ${{ steps.cfg.outputs.has_release == 'true' }}
+      id: sign_apk
+      shell: bash
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      run: |
+        set -euo pipefail
+
+        APK="${{ steps.locate.outputs.built_apk }}"
+        # AGP names unsigned release APKs ui-release-unsigned.apk; produce a
+        # clean ui-release-signed.apk for the signed output.
+        BASE="${APK%.apk}"
+        BASE="${BASE%-unsigned}"
+        SIGNED_APK="${BASE}-signed.apk"
+
+        if [[ -z "${KEYSTORE_PASSWORD}" || -z "${KEY_PASSWORD}" || -z "${KEY_ALIAS}" ]]; then
+          echo "Missing one of secrets: ANDROID_KEYSTORE_PASSWORD / ANDROID_KEY_PASSWORD / ANDROID_KEY_ALIAS" >&2
+          exit 1
+        fi
+
+        # Locate apksigner from the Android SDK (the build-tools are installed
+        # automatically by AGP). Prefer the newest installed build-tools.
+        BUILD_TOOLS=$(ls -1 "$ANDROID_HOME/build-tools" 2>/dev/null | sort -V | tail -n1)
+        if [[ -z "${BUILD_TOOLS}" ]]; then
+          echo "No build-tools found under \$ANDROID_HOME/build-tools" >&2
+          exit 1
+        fi
+        APKSIGNER="$ANDROID_HOME/build-tools/${BUILD_TOOLS}/apksigner"
+
+        "$APKSIGNER" sign \
+          --ks "${KEYSTORE_PATH}" \
+          --ks-pass "pass:${KEYSTORE_PASSWORD}" \
+          --ks-key-alias "${KEY_ALIAS}" \
+          --key-pass "pass:${KEY_PASSWORD}" \
+          --out "${SIGNED_APK}" \
+          "${APK}"
+
+        if [[ ! -s "${SIGNED_APK}" ]]; then
+          echo "apksigner did not produce ${SIGNED_APK}" >&2
+          exit 1
+        fi
+
+        echo "signed_apk=${SIGNED_APK}" >> "$GITHUB_OUTPUT"
+
+    - name: Upload release AAB
+      if: ${{ steps.cfg.outputs.has_release == 'true' }}
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.cfg.outputs.artifact_name }}
-        path: ${{ steps.sign.outputs.final_file || steps.locate.outputs.built_file }}
+        name: release-aab
+        path: ${{ steps.sign.outputs.signed_aab }}
         if-no-files-found: error
+
+    - name: Upload release APK
+      if: ${{ steps.cfg.outputs.has_release == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk
+        path: ${{ steps.sign_apk.outputs.signed_apk }}
+        if-no-files-found: error
+
+    - name: Upload debug APK
+      if: ${{ steps.cfg.outputs.has_debug == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-apk
+        path: ${{ steps.locate.outputs.built_debug }}
+        if-no-files-found: error
+
+    - name: Compute release tag
+      if: ${{ inputs.publish == true && steps.cfg.outputs.has_release == 'true' }}
+      id: tag
+      shell: bash
+      run: |
+        set -euo pipefail
+        DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+        HASH=$(git rev-parse --short=7 HEAD)
+        COUNT=$(git tag | wc -l)
+        COUNT=$((COUNT + 1))
+        echo "tag=v1.0.${DATE}-${HASH}${COUNT}" >> "$GITHUB_OUTPUT"
+
+    - name: Publish GitHub Release
+      if: ${{ inputs.publish == true && steps.cfg.outputs.has_release == 'true' }}
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.tag.outputs.tag }}
+        files: ${{ steps.sign_apk.outputs.signed_apk }}
+        generate_release_notes: true
